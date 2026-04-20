@@ -1,4 +1,4 @@
-import pokedex
+import random
 from abc import ABC, abstractmethod
 
 class Pokemon(ABC):
@@ -16,12 +16,12 @@ class Pokemon(ABC):
 
     @hp_actual.setter
     def hp_actual(self, valor):
-        nuevo_valor = valor
-        if nuevo_valor < 0:
-            nuevo_valor = 0
-        if nuevo_valor > self.__hp_maximo:
-            nuevo_valor = self.__hp_maximo
-        self.__hp_actual = nuevo_valor
+        if valor < 0:
+            self.__hp_actual = 0
+        elif valor > self.__hp_maximo:
+            self.__hp_actual = self.__hp_maximo
+        else:
+            self.__hp_actual = valor
 
     @property
     def energia_actual(self):
@@ -48,16 +48,18 @@ class Pokemon(ABC):
         self.energia_actual += 20
         print(f"{self.nombre} descansa y recupera energia.")
 
-    def recibir_daño(self, daño):
+    def recibir_dano(self, dano):
         if self.defendiendo:
-            daño = daño // 2
+            dano = dano // 2
             self.defendiendo = False
-        self.hp_actual -= daño
-        print(f"{self.nombre} recibe {daño} de daño.")
+
+        self.hp_actual -= dano
+        print(f"{self.nombre} recibe {dano} de danio.")
 
     @abstractmethod
     def atacar(self, oponente):
         pass
+
 
 class PokemonAgua(Pokemon):
     def __init__(self, nombre, hp_maximo, energia_maxima):
@@ -65,19 +67,74 @@ class PokemonAgua(Pokemon):
 
     def atacar(self, oponente):
         if self.energia_actual < 15:
-            print("No hay energía suficiente.")
+            print("No hay energia suficiente.")
             return
 
         self.energia_actual -= 15
-        daño = 10
+        dano = 10
 
         if isinstance(oponente, PokemonFuego):
-            daño *= 2
-            print("¡Es súper efectivo!")
+            dano *= 2
+            print("¡Es super efectivo!")
 
-        oponente.recibir_daño(daño)
+        oponente.recibir_dano(dano)
 
-    class PokemonFuego
+
+class PokemonFuego(Pokemon):
+    def __init__(self, nombre, hp_maximo, energia_maxima):
+        super().__init__(nombre, hp_maximo, energia_maxima)
+
+    def atacar(self, oponente):
+        if self.energia_actual < 15:
+            print("No hay energia suficiente.")
+            return
+
+        self.energia_actual -= 15
+        dano = 10
+
+        if isinstance(oponente, PokemonPlanta):
+            dano *= 2
+            print("¡Es super efectivo!")
+
+        oponente.recibir_dano(dano)
+
+
+class PokemonPlanta(Pokemon):
+    def __init__(self, nombre, hp_maximo, energia_maxima):
+        super().__init__(nombre, hp_maximo, energia_maxima)
+
+    def atacar(self, oponente):
+        if self.energia_actual < 15:
+            print("No tiene energia sufieciente")
+            return
+
+        self.energia_actual -= 15
+        dano = 10
+
+        if isinstance(oponente, PokemonAgua):
+            dano *= 2
+            print("¡Es efectivo!")
+
+        oponente.recibir_dano(dano)
+
+class PokemonElectrico(Pokemon):
+    def __init__(self, nombre, hp_maximo, energia_maxima):
+        super().__init__(nombre, hp_maximo, energia_maxima)
+
+    def atacar(self, oponente):
+        if self.energia_actual < 15:
+            print("No hay energia suficiente.")
+            return
+
+        self.energia_actual -= 15
+        dano = 10
+
+        if random.random() < 0.2:
+            print("Paralizado")
+
+        oponente.recibir_dano(dano)
+
+
 
 
 
