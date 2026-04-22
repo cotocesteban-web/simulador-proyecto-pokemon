@@ -1,4 +1,4 @@
-### ** Este es el archivo Main (Principal) hara que ejecute todo lo que hemo llevado con los dos archivos
+### ** Este es el archivo Main (Principal) hara que ejecute todo lo que hemos creado con los dos archivos
 ## Importamos ramdom para que nos elija un numero aleatorio del rando que le indiquemos.
 import random
 # Importar el pokedex que es donde esta el diccionario de todo los pokemones con sus caracteristicas:
@@ -8,7 +8,7 @@ from pokemon_clases import PokemonFuego, PokemonAgua, PokemonPlanta, PokemonElec
 
 ### aca creamos el pokemon: 
 def crear_pokemon(opcion):
-
+# Si el usuario ingresa un número (como 1), la función lo convierte en el texto "1"
     opcion = str(opcion)
     
     if opcion in pokedex.CATALOGO_POKEMON:
@@ -52,13 +52,15 @@ def jugar():
         eleccion1 = input("Elije el numero de tu Pokemon: ")
         jugador = crear_pokemon(eleccion1)
         # Seleccion Aleatoria por random:
+        #Genera un número enterto aleatorio entre 1 y 8 pokemones
         eleccion_pc = str(random.randint(1, 8))
         jugador2 = crear_pokemon(eleccion_pc)
 
     else: 
         print("Modo invalido")
+        return
 
-        ## Mostrar oponente en los mensajes
+    ## Mostrar oponente en los mensajes
     if modo =="1":
         rival = "(Jugador vs jugador)"
     else:
@@ -72,59 +74,64 @@ def jugar():
         ## Turno del jugador 1;:
         print(f"\n Turno de {jugador.nombre} ")
         print(f" HP {jugador.hp_actual} | Energia: {jugador.energia_actual}")
-        accion = input("Selecciona (1. Atacar, 2.Defender, 3.Descansar:)")
 
-        if accion == "1":
-            jugador.atacar(jugador2)
-        elif accion == "2":
-            jugador.defender()
-        elif accion == "3":
-            jugador.descansar()
-
-        else:
+        # Try-Except para manejar entradas invalidas (letras o numeros fuera de rango)
+        try:
+            accion = int(input("Selecciona (1. Atacar, 2.Defender, 3.Descansar): "))
+            if accion == 1:
+                jugador.atacar(jugador2)
+            elif accion == 2:
+                jugador.defender()
+            elif accion == 3:
+                jugador.descansar()
+            else:
+                # Si es un numero pero no esta en el menu, lanzamos error para ir al except
+                raise ValueError
+        except ValueError:
             print("Opcion invalida, pierdes el turno: ")
 
-
-            ## Verificar el estado del Jugador 2\
+        # Verificar si el oponente murió antes de su turno
         if jugador2.hp_actual <= 0:
-            print(f"\2 {jugador.nombre} Ha ganado la batalla")
+            print(f"\n {jugador.nombre} ha ganado la batalla")
             break
 
-             # turno del jUGADOR 2
+        # turno del jUGADOR 2
         print(F"\n  Turno de {jugador2.nombre} {rival} ")
         print(f"Hp {jugador2.hp_actual} | Energia:{jugador2.energia_actual}")
         
         if modo == "1":
             ## el Jugador2
-            accion2 = input("Selecciona(1. Atacar, 2.Defender, 3.Decansar):")
-            if accion2 == "1":
-                jugador2.atacar(jugador)
-            elif accion2 == "2":
-                jugador2.defender()
-            elif accion2 =="3":
-                jugador2.descansar()
-            else:
+            try:
+                accion2 = int(input("Selecciona(1. Atacar, 2.Defender, 3.Decansar): "))
+                if accion2 == 1:
+                    jugador2.atacar(jugador)
+                elif accion2 == 2:
+                    jugador2.defender()
+                elif accion2 == 3:
+                    jugador2.descansar()
+                else:
+                    raise ValueError
+            except ValueError:
                 print("Opcion invalida, pierdes turno")
-            # Si es computadora;
+            
+        # Si es computadora;
         else: 
+            #Esta funcion Rndom Choice: elige un elemento al azar de la lista que tiene adentro.
             accion_pc_eleccion = random.choice(["atacar", "atacar", "descansar"])
             if accion_pc_eleccion == "atacar":
                 jugador2.atacar(jugador)
-
             else:
                 jugador2.descansar()
 
-            ## verificar i el jugador 1 murio:
-        if jugador2.hp_actual <= 0:
+        ## verificar si el jugador 1 murio:
+        if jugador.hp_actual <= 0:
           print(f"\n {jugador2.nombre} {rival} ha ganado la batalla")
   
-
 if __name__ == "__main__":
-    jugar()   
+    jugar()
 
 
 
-    
 
 
         
