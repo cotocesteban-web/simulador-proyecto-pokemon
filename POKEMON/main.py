@@ -1,7 +1,7 @@
 import random
 import pokedex
 from pokemon_clases import PokemonFuego, PokemonAgua, PokemonPlanta, PokemonElectrico
-### aca cramos el pokemon: 
+### aca creamos el pokemon: 
 def crear_pokemon(opcion):
     opcion = input("Selecciona: ")
     if opcion.isdigit():
@@ -54,13 +54,28 @@ def jugar():
         while jugador.hp_actual > 0 and computadora.hp_actual > 0:
             # Mostrar el turno de jugador
             print(f"\n Turno de {jugador.nombre}")
+            # Aca guardamos lo qu el ususrio ingresa sobre que accion tomar
             accion = input("Que accion deseas hacer?")
 
             if accion == "1":
                 jugador.atacar(computadora)
+            elif accion == "2":
+                jugador.defender()
+            elif accion == "3":
+                jugador.descansar()
 
             else:
                 print("opcion invalida, espera nuevamente el turno")
+
+                ## Moatrar si la pc aun le quedan Energy points:
+            if computadora.hp_actual <= 0:
+                print(f"\n{computadora.nombre} ya no tiene Energy Points")
+
+                #
+                accion_computadora = random.choice([]
+
+    
+
 
         
            
